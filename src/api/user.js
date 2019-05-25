@@ -6,7 +6,7 @@ export default {
     account,
     pwd
   }) => {
-    return query('login/check_v2', {
+    return query('wap/login/check_v2', {
       account,
       pwd
     })

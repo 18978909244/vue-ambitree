@@ -96,11 +96,11 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  console.log(to)
+  // console.log(to)
   let token = Cookies.get("is_login")
-  console.log(`token,${token}`)
+  // console.log(`token,${token}`)
   if (!to.meta.requireAuth) {
-    console.log('here',to)
+    // console.log('here',to)
     //路由元信息requireAuth:true，或者homePages:true，则不做登录校验
     next()
   } else {

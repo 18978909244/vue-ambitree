@@ -14,42 +14,30 @@
               </div>
               <hr class="separator">
 
-              <div
-                class="cart-overview js-cart"
-                data-refresh-url="//www.ambitree.in/zh/cart?ajax=1&amp;action=refresh"
-              >
+              <div class="cart-overview js-cart">
                 <ul class="cart-items">
-                  <li class="cart-item" v-for="(item,index) in cartList" :key="index">
+                  <li
+                    class="cart-item"
+                    v-for="(item,index) in cartList"
+                    :key="index"
+                  >
 
                     <div class="product-line-grid">
                       <!--  product left content: image-->
                       <div class="product-line-grid-left col-md-3 col-xs-4">
                         <span class="product-image media-middle">
-                          <img
-                            src="https://www.ambitree.in/409-cart_default/lenvima-lenvatinib-4mg.jpg"
-                          >
+                          <img :src="item.productInfo.image">
                         </span>
                       </div>
 
                       <!--  product left body: description -->
-                      <div class="product-line-grid-body col-md-4 col-xs-8" @click="routerTo('detail')">
+                      <div
+                        class="product-line-grid-body col-md-4 col-xs-8"
+                        @click="routerTo('detail')"
+                      >
                         <div class="product-line-info">
-                          Lenvima (Lenvatinib)仑伐替尼 乐伐替尼 4mg
+                          {{item.productInfo.store_name}}
                         </div>
-
-                        <div class="product-line-info product-price h5 has-discount">
-                          <div class="product-discount">
-                            <span class="regular-price">US$&nbsp;1,124.00</span>
-                            <span class="discount discount-amount">
-                              -US$&nbsp;310.00
-                            </span>
-                          </div>
-                          <div class="current-price">
-                            <span class="price">US$&nbsp;814.00</span>
-                          </div>
-                        </div>
-
-                        <br>
 
                       </div>
 
@@ -60,12 +48,18 @@
                           <div class="col-md-10 col-xs-6">
                             <div class="row">
                               <div class="col-md-6 col-xs-6 qty">
-                                  <el-input-number v-model="num" controls-position="right" @change="handleChange" :min="1" :max="10"></el-input-number>
-                                </div>
+                                <el-input-number
+                                  v-model="item.cart_num"
+                                  controls-position="right"
+                                  @change="handleChange"
+                                  :min="1"
+                                  :max="item.trueStock"
+                                ></el-input-number>
+                              </div>
                               <div class="col-md-6 col-xs-2 price">
                                 <span class="product-price">
                                   <strong>
-                                    US$&nbsp;814.00
+                                    US$&nbsp;{{item.productInfo.price*item.cart_num}}
                                   </strong>
                                 </span>
                               </div>
@@ -112,9 +106,9 @@
                     id="cart-subtotal-products"
                   >
                     <span class="label js-subtotal">
-                      2 {{$t('cart.countItem')}}
+                      {{cartList.length}} {{$t('cart.countItem')}}
                     </span>
-                    <span class="value">US$&nbsp;1,083.00</span>
+                    <span class="value">US$&nbsp;{{totalPrice}}</span>
                   </div>
                   <div
                     class="cart-summary-line"
@@ -192,13 +186,13 @@
                 <div class="card-block">
                   <div class="cart-summary-line cart-total">
                     <span class="label">{{$t('cart.total')}}</span>
-                    <span class="value">US$&nbsp;1,083.00</span>
+                    <span class="value">US$&nbsp;{{totalPrice}}</span>
                   </div>
 
-                  <div class="cart-summary-line">
+                  <!-- <div class="cart-summary-line">
                     <small class="label">{{$t('cart.noOtherFee')}}</small>
                     <small class="value">US$&nbsp;0.00</small>
-                  </div>
+                  </div> -->
                 </div>
 
                 <hr class="separator">
@@ -207,7 +201,7 @@
               <div class="checkout cart-detailed-actions card-block">
                 <div class="text-sm-center">
                   <a
-                    href="https://www.ambitree.in/zh/订单"
+                    href="javascript:;"
                     class="btn btn-primary"
                   >{{$t('cart.continueCount')}}</a>
 
@@ -228,7 +222,8 @@
 
 </template>
 <script>
-import Message from '../components/Message'
+import Message from "../components/Message";
+import { Cart } from "../api";
 export default {
   name: "cart",
   components: {
@@ -236,16 +231,36 @@ export default {
   },
   data() {
     return {
-      cartList:[1,2],
-      num:1
+      cartList: [],
+      num: 1
     };
+  },
+  computed: {
+    totalPrice() {
+      let total = 0;
+      for (let i = 0; i < this.cartList.length; i++) {
+        total +=
+          this.cartList[i].cart_num *
+          Number(this.cartList[i].productInfo.price);
+      }
+      return total
+    }
+  },
+  created() {
+    this.init();
+  },
+  methods: {
+    async init() {
+      let result = await Cart.getCart();
+      this.cartList = result.valid;
+    }
   }
 };
 </script>
 
 
 <style scoped lang="less">
-.el-input-number{
-  width:80px;
+.el-input-number {
+  width: 80px;
 }
 </style>

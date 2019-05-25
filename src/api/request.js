@@ -1,8 +1,6 @@
 import axios from 'axios'
-import { resolve } from '_any-promise@1.3.0@any-promise';
-const host = ''
-const uid = 1
-
+import Cookies from 'js-cookie';
+const uid = localStorage.getItem('user_id')
 const PRE = process.env.NODE_ENV === 'production'
   ? `${location.protocol}//${location.hostname}`
   : '';
@@ -10,7 +8,7 @@ const PRE = process.env.NODE_ENV === 'production'
 
 export function post(url, data = {}) {
   let split = url.indexOf('?') > -1 ? '&' : '?'
-  url = url + split + 'uid=' + uid
+  url = url + split + 'uid=' + localStorage.getItem('user_id')
   console.log('post request:', url)
   // return axios.post(url, data).then(res => res.data)
   return new Promise((resolve,reject)=>{
@@ -34,7 +32,7 @@ export function get(url, payload = {}) {
     url = url.includes('?') ? url + '&' + query : url + '?' + query
   }
   let split = url.indexOf('?') > -1 ? '&' : '?'
-  url = url + split + 'uid=' + uid
+  url = url + split + 'uid=' + localStorage.getItem('user_id')
   console.log('post request:', url)
   return new Promise((resolve,reject)=>{
     axios.get(url).then(res=>{

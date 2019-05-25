@@ -138,6 +138,7 @@ export default {
           account: this.account,
           pwd: this.pwd
         });
+        localStorage.setItem('user_id',result.loginUid)
         this.$router.push({
           path: this.$route.query.redirect || "/"
         });
