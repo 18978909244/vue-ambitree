@@ -37,8 +37,16 @@
                   <el-dropdown-item>人民币</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-button type="text" @click="routerTo('login')" v-if="!login">{{$t("header.signin")}}</el-button>
-              <el-button type="text" @click="signout" v-else>{{$t("header.signout")}}</el-button>
+              <el-button
+                type="text"
+                @click="routerTo('login')"
+                v-if="!login"
+              >{{$t("header.signin")}}</el-button>
+              <el-button
+                type="text"
+                @click="signout"
+                v-else
+              >{{$t("header.signout")}}</el-button>
               <el-button
                 type="primary"
                 @click="routerTo('cart')"
@@ -103,20 +111,39 @@
                   :key="index"
                 >
                   <el-dropdown @command="routerTo">
-                    <span class="el-dropdown-link">
+                    <span
+                      class="el-dropdown-link"
+                      v-if="item.children.length==0"
+                      @click="routerTo(`category?id=${item.id}`)"
+                    >
+                      {{item.cate_name}}
+                    </span>
+                    <span
+                      class="el-dropdown-link"
+                      v-else
+                    >
                       {{item.cate_name}}<i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu
                       slot="dropdown"
-                      v-for="(child,_index) in item.children"
-                      :key="_index"
+                      v-if="item.children.length>0"
                     >
-                      <el-dropdown-item :command="child.route">{{child.name}}</el-dropdown-item>
+                      <el-dropdown-item
+                        v-for="(child,_index) in item.children"
+                        :key="_index"
+                        :command="`category?id=${child.id}`"
+                      >{{child.cate_name}}</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </li>
-                <li class="top-nav" @click="routerTo('question')">常见问题</li>
-                <li class="top-nav" @click="routerTo('checkShip')">发货运单号</li>
+                <li
+                  class="top-nav"
+                  @click="routerTo('question')"
+                >常见问题</li>
+                <li
+                  class="top-nav"
+                  @click="routerTo('checkShip')"
+                >发货运单号</li>
               </ul>
               <div class="clearfix"></div>
             </div>
@@ -164,88 +191,52 @@
   </header>
 </template>
 <script>
-import Cookies from 'js-cookie';
-import {Common} from '../api'
+import Cookies from "js-cookie";
+import { Common } from "../api";
 export default {
   name: "headers",
   components: {},
   data() {
     return {
-      searchWord:'',
-      categoryList:[],
-      _categoryList: [
-        {
-          name: "抗癌",
-          children: [
-            {
-              name: "a",
-              route: "category"
-            }
-          ]
-        },
-
-        {
-          name: "肝炎",
-          children: [
-            {
-              name: "a",
-              route: "category"
-            }
-          ]
-        },
-        {
-          name: "其他处方药",
-          children: [
-            {
-              name: "a",
-              route: "category"
-            }
-          ]
-        },
-        {
-          name: "男性健康",
-          children: [
-            {
-              name: "a",
-              route: "category"
-            }
-          ]
-        }
-      ]
+      searchWord: "",
+      categoryList: []
     };
   },
-  computed:{
-    language(){
+  computed: {
+    language() {
       let obj = {
-        cn:'中文',
-        en:'english',
-        hk:'中文繁体'
-      }
-      return obj[this.$i18n.locale]
+        cn: "中文",
+        en: "english",
+        hk: "中文繁体"
+      };
+      return obj[this.$i18n.locale];
     },
-    login(){
-      let token = Cookies.get("is_login")
-      console.log('token',token,token==1)
-      return token==1
+    login() {
+      let token = Cookies.get("is_login");
+      console.log("token", token, token == 1);
+      return token == 1;
     }
   },
-  async created(){
-    this.getCat()
+  async mounted() {
+    this.getCat();
   },
   methods: {
-    async getCat(){
-      // this.categoryList = await Common.getCat()
+    async getCat() {
+      let categoryList = await Common.getCat();
+      for (let i = 0; i < categoryList.length; i++) {
+        categoryList[i].children = await Common.getCatId(categoryList[i].id);
+      }
+      this.categoryList = categoryList;
     },
-    inputSearchWord(e){
-      this.searchWord = e
+    inputSearchWord(e) {
+      this.searchWord = e;
     },
     handleCommand(e) {
       this.$i18n.locale = e;
     },
-    signout(){
-      Cookies.remove('is_login')
+    signout() {
+      Cookies.remove("is_login");
     }
-
   }
 };
 </script>

@@ -93,7 +93,8 @@
                           controls-position="right"
                           @change="handleChange"
                           :min="1"
-                          :max="10"
+                          :max="storeInfo.stock"
+                          :disabled="false"
                         ></el-input-number>
                       </div>
                     </div>
@@ -255,13 +256,17 @@ export default {
   },
   methods: {
     async init(id = 1) {
-      let {
-        storeInfo,
-        similarity,
-        productAttr,
-        productValue
-      } = await Detail.getDetail(id);
-      this.storeInfo = storeInfo;
+      try {
+        let {
+          storeInfo,
+          similarity,
+          productAttr,
+          productValue
+        } = await Detail.getDetail(id);
+        this.storeInfo = storeInfo;
+      } catch (e) {
+        console.log(e);
+      }
     },
     handleChange() {},
     async addCart(num) {
@@ -270,9 +275,9 @@ export default {
         console.log(result);
       } catch (message) {
         this.$message({
-          type:'error',
+          type: "error",
           message
-        })
+        });
       }
     }
   }

@@ -28,7 +28,10 @@
           id="content"
           class="page-home"
         >
-          <div id="carousel" style="margin-bottom:20px">
+          <div
+            id="carousel"
+            style="margin-bottom:20px"
+          >
             <slider
               ref="slider"
               :options="options"
@@ -48,7 +51,10 @@
             <h2 class="h2 products-section-title text-uppercase">
               {{$t('index.popProducts')}}
             </h2>
-            <div class="products" style="justify-content:space-around">
+            <div
+              class="products"
+              style="justify-content:space-around"
+            >
               <article
                 v-for="(item,index) in productList"
                 :key="index"
@@ -106,7 +112,11 @@
               </article>
 
             </div>
-            <div class="all-product-link float-xs-left float-md-right h4" style="width:100%;text-align:center" @click="routerTo('category')">
+            <div
+              class="all-product-link float-xs-left float-md-right h4"
+              style="width:100%;text-align:center"
+              @click="routerTo('category')"
+            >
               {{$t('index.allproducts')}}<i class="el-icon-position"></i>
             </div>
           </section>
@@ -145,9 +155,13 @@ export default {
     };
   },
   async created() {
+    try{
     let {banner,lovely,menus,hot,best} = await Home.init();
     this.banner = banner
     this.productList = hot
+    }catch(e){
+      console.log(e)
+    }
   }
 };
 </script>

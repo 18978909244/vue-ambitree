@@ -20,7 +20,7 @@ const routes = [
       meta: {
         requireAuth: false
       }
-    },{
+    }, {
       path: 'register',
       name: 'register',
       component: () => import('./pages/Register'),
@@ -104,7 +104,7 @@ router.beforeEach(async (to, from, next) => {
     //路由元信息requireAuth:true，或者homePages:true，则不做登录校验
     next()
   } else {
-    if (token=='1') { //判断用户是否登录
+    if (token == '1') { //判断用户是否登录
       next()
     } else {
       if (to.path === "/login") {
