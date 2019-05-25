@@ -172,7 +172,7 @@
 </template>
 <script>
 export default {
-  name: "footer",
+  name: "footers",
   components: {},
   computed: {
     list(){

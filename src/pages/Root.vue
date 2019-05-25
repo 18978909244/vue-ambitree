@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 export default {
   name: "root",
   components: {
@@ -26,11 +26,14 @@ export default {
 <style lang="less">
 // @import "~less/base.less";
 
+button:focus {
+  outline: 0;
+}
 #app {
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  // text-align: center;
   color: #2b2b2b;
   background: #fff;
 }

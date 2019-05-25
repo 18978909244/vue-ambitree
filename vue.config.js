@@ -27,7 +27,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/': {
-        target: 'http://soho.hzyctools.com/routine/',
+        target: 'http://drug.kuashou.com/',
         ws: false,
         changeOrigin: true
       }

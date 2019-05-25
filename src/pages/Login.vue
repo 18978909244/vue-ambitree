@@ -1,34 +1,6 @@
 <template>
+
   <div class="container">
-
-    <nav
-      data-depth="1"
-      class="breadcrumb hidden-sm-down"
-    >
-      <ol
-        itemscope=""
-        itemtype="http://schema.org/BreadcrumbList"
-      >
-
-        <li
-          itemprop="itemListElement"
-          itemscope=""
-          itemtype="http://schema.org/ListItem"
-        >
-          <a
-            itemprop="item"
-            href="https://www.ambitree.in/zh/"
-          >
-            <span itemprop="name">主页</span>
-          </a>
-          <meta
-            itemprop="position"
-            content="1"
-          >
-        </li>
-
-      </ol>
-    </nav>
 
     <div id="content-wrapper">
 
@@ -36,7 +8,7 @@
 
         <header class="page-header">
           <h1>
-            Log in to your account
+            {{$t('login.loginAccount')}}
           </h1>
         </header>
 
@@ -47,125 +19,92 @@
 
           <section class="login-form">
 
-            <form
-              id="login-form"
-              action="https://www.ambitree.in/zh/login?back=my-account"
-              method="post"
-            >
+            <section>
 
-              <section>
+              <div class="form-group row ">
+                <label class="col-md-3 form-control-label required">
+                  {{$t('login.email')}}
+                </label>
+                <div class="col-md-6">
 
-                <input
-                  type="hidden"
-                  name="back"
-                  value="my-account"
-                >
+                  <input
+                    class="form-control"
+                    name="account"
+                    v-model.trim="account"
+                  />
 
-                <div class="form-group row ">
-                  <label class="col-md-3 form-control-label required">
-                    E-mail(邮箱)
-                  </label>
-                  <div class="col-md-6">
+                </div>
 
+                <div class="col-md-3 form-control-comment">
+
+                </div>
+              </div>
+
+              <div class="form-group row ">
+                <label class="col-md-3 form-control-label required">
+                  {{$t('login.password')}}
+                </label>
+                <div class="col-md-6">
+
+                  <div class="input-group js-parent-focus">
                     <input
-                      class="form-control"
-                      name="email"
-                      type="email"
-                      value=""
-                      required=""
+                      class="form-control js-child-focus js-visible-password"
+                      name="password"
+                      type="password"
+                      v-model.trim="pwd"
                     >
-
                   </div>
 
-                  <div class="col-md-3 form-control-comment">
-
-                  </div>
                 </div>
 
-                <div class="form-group row ">
-                  <label class="col-md-3 form-control-label required">
-                    密码
-                  </label>
-                  <div class="col-md-6">
+                <div class="col-md-3 form-control-comment">
 
-                    <div class="input-group js-parent-focus">
-                      <input
-                        class="form-control js-child-focus js-visible-password"
-                        name="password"
-                        type="password"
-                        value=""
-                        pattern=".{5,}"
-                        required=""
-                      >
-                      <span class="input-group-btn">
-                        <button
-                          class="btn"
-                          type="button"
-                          data-action="show-password"
-                          data-text-show="查看"
-                          data-text-hide="Hide"
-                        >
-                          查看
-                        </button>
-                      </span>
-                    </div>
-
-                  </div>
-
-                  <div class="col-md-3 form-control-comment">
-
-                  </div>
                 </div>
+              </div>
 
-                <div class="forgot-password">
-                  <a
-                    href="https://www.ambitree.in/zh/password-recovery"
-                    rel="nofollow"
-                  >
-                    忘记密码？
-                  </a>
-                </div>
-              </section>
-
-              <footer class="form-footer text-sm-center clearfix">
-                <input
-                  type="hidden"
-                  name="submitLogin"
-                  value="1"
+              <div
+                class="forgot-password"
+                style="text-align:center"
+              >
+                <a
+                  href="javascript:;"
+                  @click="routerTo('forgetPassword')"
                 >
+                  {{$t('login.forgetPassword')}}
+                </a>
+              </div>
+            </section>
 
-                <button
-                  id="submit-login"
-                  class="btn btn-primary"
-                  data-link-action="sign-in"
-                  type="submit"
-                >
-                  登录
-                </button>
+            <footer class="form-footer text-sm-center clearfix">
 
-              </footer>
+              <button
+                id="submit-login"
+                class="btn btn-primary"
+                data-link-action="sign-in"
+                @click="onClickLogin"
+              >
+                {{$t('login.login')}}
+              </button>
 
-            </form>
+            </footer>
 
           </section>
           <hr>
 
-          <div class="no-account">
+          <div
+            class="no-account"
+            style="text-align:center"
+          >
             <a
-              href="https://www.ambitree.in/zh/login?create_account=1"
+              href="javascript:;"
               data-link-action="display-register-form"
+              @click="routerTo('register')"
             >
-              No account? Create one here
+              {{$t('login.noAccount')}}
             </a>
           </div>
 
         </section>
-
-        <footer class="page-footer">
-
-          <!-- Footer content -->
-
-        </footer>
 
       </section>
 
@@ -174,11 +113,38 @@
   </div>
 </template>
 <script>
+import { User } from "../api";
 export default {
   name: "login",
   components: {},
   data() {
-    return {};
+    return {
+      account: "crmeb",
+      pwd: "123456"
+    };
+  },
+  methods: {
+    async onClickLogin(e) {
+      if (!this.account) {
+        this.$message("请输入账号");
+        return;
+      }
+      if (!this.pwd) {
+        this.$message("请输入密码");
+        return;
+      }
+      try {
+        let result = await User.Login({
+          account: this.account,
+          pwd: this.pwd
+        });
+        this.$router.push({
+          path: this.$route.query.redirect || "/"
+        });
+      } catch (e) {
+        this.$message(e+'');
+      }
+    }
   }
 };
 </script>

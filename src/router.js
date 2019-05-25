@@ -1,7 +1,5 @@
 import VueRouter from 'vue-router'
-// import {
-//   User
-// } from './api'
+import Cookies from 'js-cookie';
 
 const routes = [
   {
@@ -34,7 +32,7 @@ const routes = [
       name: 'cart',
       component: () => import('./pages/Cart'),
       meta: {
-        requireAuth: false
+        requireAuth: true
       }
     }, {
       path: 'category',
@@ -55,7 +53,7 @@ const routes = [
       name: 'contact',
       component: () => import('./pages/Contact'),
       meta: {
-        requireAuth: false
+        requireAuth: true
       }
     }, {
       path: 'search',
@@ -63,6 +61,27 @@ const routes = [
       component: () => import('./pages/Search'),
       meta: {
         requireAuth: false
+      }
+    }, {
+      path: 'question',
+      name: 'question',
+      component: () => import('./pages/Question'),
+      meta: {
+        requireAuth: false
+      }
+    }, {
+      path: 'checkShip',
+      name: 'checkShip',
+      component: () => import('./pages/CheckShip'),
+      meta: {
+        requireAuth: true
+      }
+    }, {
+      path: 'myAccount',
+      name: 'myAccount',
+      component: () => import('./pages/MyAccount'),
+      meta: {
+        requireAuth: true
       }
     }]
   },
@@ -77,21 +96,30 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  next()
-  // if (to.matched.some(r => r.meta.requireAuth)) {
-  //   try {
-  //     await User.CheckToken()
-  //     console.log('正常')
-  //     next()
-  //   } catch (e) {
-  //     console.log('错误', e)
-  //     // todo 清空本地缓存
-  //     next('/login');
-  //   }
-  //   console.log(to);
-  // } else {
-  //   next();
-  // }
+  console.log(to)
+  let token = Cookies.get("is_login")
+  console.log(`token,${token}`)
+  if (!to.meta.requireAuth) {
+    console.log('here',to)
+    //路由元信息requireAuth:true，或者homePages:true，则不做登录校验
+    next()
+  } else {
+    if (token=='1') { //判断用户是否登录
+      next()
+    } else {
+      if (to.path === "/login") {
+        next()
+      } else {
+        next({
+          path: "/login",
+          query: {
+            redirect: to.fullPath
+          } //将目的路由地址存入login的query中
+        })
+      }
+    }
+  }
+  return
 });
 
 export default router

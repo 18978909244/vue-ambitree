@@ -3,6 +3,8 @@ import VueBus from 'vue-bus'
 import APP from './App'
 import VueRouter from 'vue-router'
 import router from './router'
+import MyPlugin from './myPlugin'
+
 import ElementUI from 'element-ui'
 import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -13,6 +15,7 @@ Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(VueBus);
 Vue.use(VueI18n);
+Vue.use(MyPlugin);
 
 const i18n = new VueI18n({
   locale: 'cn',    // 语言标识
@@ -23,6 +26,8 @@ const i18n = new VueI18n({
     'hk': require('./common/lang/hk')
   }
 })
+
+
 
 new Vue({
   render: h => h(APP),

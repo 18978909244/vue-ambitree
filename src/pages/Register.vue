@@ -1,42 +1,13 @@
 <template>
   <div class="container">
 
-    <nav
-      data-depth="1"
-      class="breadcrumb hidden-sm-down"
-    >
-      <ol
-        itemscope=""
-        itemtype="http://schema.org/BreadcrumbList"
-      >
-
-        <li
-          itemprop="itemListElement"
-          itemscope=""
-          itemtype="http://schema.org/ListItem"
-        >
-          <a
-            itemprop="item"
-            href="https://www.ambitree.in/zh/"
-          >
-            <span itemprop="name">主页</span>
-          </a>
-          <meta
-            itemprop="position"
-            content="1"
-          >
-        </li>
-
-      </ol>
-    </nav>
-
     <div id="content-wrapper">
 
       <section id="main">
 
         <header class="page-header">
           <h1>
-            创建一个帐户
+            {{$t('register.createOne')}}
           </h1>
         </header>
 
@@ -46,40 +17,20 @@
         >
 
           <section class="register-form">
-            <p>Already have an account? <a href="https://www.ambitree.in/zh/login">Log in instead!</a></p>
+            <p>{{$t('register.alreadyHave')}} <a href="javascript:;" @click="routerTo('login')">{{$t('register.loginRightNow')}}</a></p>
 
-            <form
-              action="https://www.ambitree.in/zh/login?create_account=1"
-              id="customer-form"
-              class="js-customer-form"
-              method="post"
-            >
               <section>
-
-                <input
-                  type="hidden"
-                  name="id_customer"
-                  value=""
-                >
 
                 <div class="form-group row ">
                   <label class="col-md-3 form-control-label required">
                     名
                   </label>
                   <div class="col-md-6">
-
                     <input
                       class="form-control"
                       name="firstname"
                       type="text"
-                      value=""
-                      required=""
                     >
-
-                  </div>
-
-                  <div class="col-md-3 form-control-comment">
-
                   </div>
                 </div>
 
@@ -88,19 +39,11 @@
                     姓
                   </label>
                   <div class="col-md-6">
-
                     <input
                       class="form-control"
                       name="lastname"
                       type="text"
-                      value=""
-                      required=""
                     >
-
-                  </div>
-
-                  <div class="col-md-3 form-control-comment">
-
                   </div>
                 </div>
 
@@ -109,19 +52,11 @@
                     E-mail(邮箱)
                   </label>
                   <div class="col-md-6">
-
                     <input
                       class="form-control"
                       name="email"
                       type="email"
-                      value=""
-                      required=""
                     >
-
-                  </div>
-
-                  <div class="col-md-3 form-control-comment">
-
                   </div>
                 </div>
 
@@ -179,17 +114,9 @@
 
               </footer>
 
-            </form>
-
           </section>
 
         </section>
-
-        <footer class="page-footer">
-
-          <!-- Footer content -->
-
-        </footer>
 
       </section>
 

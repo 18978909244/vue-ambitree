@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Bread name='联系我们(在线客服在右下角)' />
+    <!-- <Bread name='联系我们(在线客服在右下角)' /> -->
     <div
       id="left-column"
       class="col-xs-12 col-sm-4 col-md-3"
@@ -8,12 +8,12 @@
       <div class="contact-rich">
         <h4>店信息</h4>
         <div class="block">
-          <div class="icon"><i class="material-icons"></i></div>
+          <div class="icon"><i class="el-icon-location"></i></div>
           <div class="data">Ambitree Pharma<br>Mumbai<br>India</div>
         </div>
         <hr>
         <div class="block">
-          <div class="icon"><i class="material-icons"></i></div>
+          <div class="icon"><i class="el-icon-s-opportunity"></i></div>
           <div class="data">
             传真：<br>
             +91 88829 45536
@@ -21,7 +21,7 @@
         </div>
         <hr>
         <div class="block">
-          <div class="icon"><i class="material-icons"></i></div>
+          <div class="icon"><i class="el-icon-s-marketing"></i></div>
           <div class="data email">
             Email us:<br>
           </div>
@@ -135,16 +135,6 @@
               </section>
 
               <footer class="form-footer text-sm-right">
-                <input
-                  type="text"
-                  name="url"
-                  value=""
-                >
-                <input
-                  type="hidden"
-                  name="token"
-                  value="dc65afe89143fb8cf9a474910a162706"
-                >
                 <input
                   class="btn btn-primary"
                   type="submit"

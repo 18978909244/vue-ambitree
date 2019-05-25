@@ -20,7 +20,7 @@
             <div class="col-md-7 right-nav">
               <el-dropdown @command="handleCommand">
                 <span class="el-dropdown-link">
-                  中文<i class="el-icon-arrow-down el-icon--right"></i>
+                  {{language}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="en">English</el-dropdown-item>
@@ -37,7 +37,8 @@
                   <el-dropdown-item>人民币</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-button type="text" @click="routerTo('login')">{{$t("header.signin")}}</el-button>
+              <el-button type="text" @click="routerTo('login')" v-if="!login">{{$t("header.signin")}}</el-button>
+              <el-button type="text" @click="signout" v-else>{{$t("header.signout")}}</el-button>
               <el-button
                 type="primary"
                 @click="routerTo('cart')"
@@ -103,7 +104,7 @@
                 >
                   <el-dropdown @command="routerTo">
                     <span class="el-dropdown-link">
-                      {{item.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+                      {{item.cate_name}}<i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu
                       slot="dropdown"
@@ -114,8 +115,8 @@
                     </el-dropdown-menu>
                   </el-dropdown>
                 </li>
-                <li class="top-nav">常见问题</li>
-                <li class="top-nav">发货运单号</li>
+                <li class="top-nav" @click="routerTo('question')">常见问题</li>
+                <li class="top-nav" @click="routerTo('checkShip')">发货运单号</li>
               </ul>
               <div class="clearfix"></div>
             </div>
@@ -125,7 +126,7 @@
               class="search-widget"
             >
               <el-input
-                placeholder="搜索我们的目录"
+                :placeholder="$t('header.searchCategory')"
                 v-model="searchWord"
                 class="input-with-select"
                 @change="inputSearchWord"
@@ -163,13 +164,16 @@
   </header>
 </template>
 <script>
+import Cookies from 'js-cookie';
+import {Common} from '../api'
 export default {
-  name: "header",
+  name: "headers",
   components: {},
   data() {
     return {
       searchWord:'',
-      categoryList: [
+      categoryList:[],
+      _categoryList: [
         {
           name: "抗癌",
           children: [
@@ -210,17 +214,37 @@ export default {
       ]
     };
   },
+  computed:{
+    language(){
+      let obj = {
+        cn:'中文',
+        en:'english',
+        hk:'中文繁体'
+      }
+      return obj[this.$i18n.locale]
+    },
+    login(){
+      let token = Cookies.get("is_login")
+      console.log('token',token,token==1)
+      return token==1
+    }
+  },
+  async created(){
+    this.getCat()
+  },
   methods: {
+    async getCat(){
+      // this.categoryList = await Common.getCat()
+    },
     inputSearchWord(e){
       this.searchWord = e
     },
     handleCommand(e) {
       this.$i18n.locale = e;
     },
-    routerTo(route) {
-      console.log(route);
-      this.$router.push(`/${route}`);
-    },
+    signout(){
+      Cookies.remove('is_login')
+    }
 
   }
 };
