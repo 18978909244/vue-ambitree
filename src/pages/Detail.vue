@@ -2,24 +2,29 @@
   <div class="container">
 
     <Bread />
-
+    <el-dialog
+      title="商品成功加入购物车"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center
+    >
+        <el-button @click="centerDialogVisible = false">继续购物</el-button>
+        <el-button
+          type="primary"
+          @click="routerTo('cart')"
+        >继续至结账处</el-button>
+    </el-dialog>
     <div id="content-wrapper">
-
       <section id="main">
-
         <div class="row">
           <div class="col-md-6">
-
             <section
               class="page-content"
               id="content"
             >
-
               <ul class="product-flags">
               </ul>
-
               <div class="images-container">
-
                 <div class="product-cover">
                   <img
                     class="js-qv-product-cover"
@@ -27,7 +32,6 @@
                     style="width:100%;"
                   >
                 </div>
-
                 <div class="js-qv-mask mask">
                   <ul class="product-images js-qv-product-images">
                     <li class="thumb-container">
@@ -43,12 +47,9 @@
                 </div>
 
               </div>
-
             </section>
-
           </div>
           <div class="col-md-6">
-
             <h1
               class="h1"
               itemprop="name"
@@ -245,6 +246,7 @@ export default {
   },
   data() {
     return {
+      centerDialogVisible: false,
       num: 1,
       storeInfo: {}
     };
@@ -272,7 +274,8 @@ export default {
     async addCart(num) {
       try {
         let result = await Detail.addCart(this.id, num);
-        console.log(result);
+        this.$bus.emit("cart_change", {});
+        this.centerDialogVisible = true
       } catch (message) {
         this.$message({
           type: "error",

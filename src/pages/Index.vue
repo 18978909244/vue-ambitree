@@ -139,7 +139,7 @@
 <script>
 import { Home } from "../api";
 import { slider, slideritem } from "vue-concise-slider";
-export default {
+export default { 
   name: "index",
   components: {
     slideritem,

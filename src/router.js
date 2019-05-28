@@ -53,7 +53,7 @@ const routes = [
       name: 'contact',
       component: () => import('./pages/Contact'),
       meta: {
-        requireAuth: true
+        requireAuth: false
       }
     }, {
       path: 'search',
@@ -83,6 +83,27 @@ const routes = [
       meta: {
         requireAuth: true
       }
+    }, {
+      path: 'orderDetail',
+      name: 'orderDetail',
+      component: () => import('./pages/OrderDetail'),
+      meta: {
+        requireAuth: true
+      }
+    }, {
+      path: 'orderList',
+      name: 'orderList',
+      component: () => import('./pages/OrderList'),
+      meta: {
+        requireAuth: true
+      }
+    }, {
+      path: 'address',
+      name: 'address',
+      component: () => import('./pages/Address'),
+      meta: {
+        requireAuth: true
+      }
     }]
   },
   // {
@@ -97,19 +118,20 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, from, next) => {
   // console.log(to)
-  let token = Cookies.get("is_login")
+  let user_id = Cookies.get("user_id")
   // console.log(`token,${token}`)
   if (!to.meta.requireAuth) {
     // console.log('here',to)
     //路由元信息requireAuth:true，或者homePages:true，则不做登录校验
     next()
   } else {
-    if (token == '1') { //判断用户是否登录
+    if (user_id) { //判断用户是否登录
       next()
     } else {
       if (to.path === "/login") {
         next()
       } else {
+        console.log('no user_id router to')
         next({
           path: "/login",
           query: {

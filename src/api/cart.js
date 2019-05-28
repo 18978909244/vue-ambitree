@@ -21,6 +21,11 @@ export default {
       cartId
     })
   },
+  remove_cart:(ids)=>{
+    return post('routine/auth_api/remove_cart',{
+      ids
+    })
+  },
   editUserAddress: ({
     address,
     detail,

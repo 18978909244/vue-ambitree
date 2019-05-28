@@ -12,8 +12,11 @@ MyPlugin.install = function (Vue, options) {
     },
     methods: {
       routerTo(route) {
-        console.log(route);
-        this.$router.push(`/${route}`);
+        if(route==='back'){
+          this.$router.back()
+        }else{
+          this.$router.push(`/${route}`);
+        }
       },
       loginout(){
         console.log('loginout')

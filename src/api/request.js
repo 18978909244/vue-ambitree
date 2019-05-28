@@ -1,36 +1,51 @@
 import axios from 'axios'
 import Cookies from 'js-cookie';
 import router from '../router'
-import { Loading } from 'element-ui';
+
+import {
+  showFullScreenLoading,
+  tryHideFullScreenLoading,
+} from './axiosInitHelper'
 const PRE = process.env.NODE_ENV === 'production'
   ? `${location.protocol}//${location.hostname}`
   : '';
 
 
-export function post(url, data = {}, needUid = true) {
-  let loadingInstance = Loading.service({ fullscreen: true })
-  return new Promise((resolve, reject) => {
+// 请求拦截器
+axios.interceptors.request.use((config) => {
+  showFullScreenLoading()
+  return config
+}, (error) => {
+  return Promise.reject(error)
+})
 
+// 响应拦截器
+axios.interceptors.response.use((response) => {
+  tryHideFullScreenLoading()
+  return response
+}, (error) => {
+  tryHideFullScreenLoading()
+  return Promise.reject(error)
+})
+
+export function post(url, data = {}, needUid = true) {
+  return new Promise((resolve, reject) => {
     const uid = Cookies.get('user_id')
-    if (!uid) {
+    if (needUid && !uid) {
       router.push({
         name: 'login'
       });
     }
-    if (needUid) {
-      let split = url.indexOf('?') > -1 ? '&' : '?'
-      url = url + split + 'uid=' + uid
-    }
+    let split = url.indexOf('?') > -1 ? '&' : '?'
+    url = url + split + 'uid=' + uid
     console.log('post request:', url)
     axios.post(url, data).then(res => {
-      loadingInstance.close();
       if (res.data.code === 200) return resolve(res.data.data)
       reject({
         code: 402,
         msg: res.data.msg
       })
     }).catch(e => {
-      loadingInstance.close();
       reject({
         code: 403
       })
@@ -39,14 +54,15 @@ export function post(url, data = {}, needUid = true) {
 }
 
 export function get(url, payload = {}, needUid = true) {
-  let loadingInstance = Loading.service({ fullscreen: true })
   return new Promise((resolve, reject) => {
     const uid = Cookies.get('user_id')
-    if (!uid) {
+    if (needUid && !uid) {
       router.push({
         name: 'login'
       });
     }
+    let split = url.indexOf('?') > -1 ? '&' : '?'
+    url = url + split + 'uid=' + uid
     if (!Object.is(payload, {})) {
       let arr = []
       Object.keys(payload).forEach(item => {
@@ -62,14 +78,12 @@ export function get(url, payload = {}, needUid = true) {
     }
     console.log('post request:', url)
     axios.get(url).then(res => {
-      loadingInstance.close();
       if (res.data.code === 200) return resolve(res.data.data)
       reject({
         code: 402,
         msg: res.data.msg
       })
     }).catch(e => {
-      loadingInstance.close();
       reject({
         code: 403
       })
@@ -78,7 +92,6 @@ export function get(url, payload = {}, needUid = true) {
 }
 
 export function query(url, payload = {}) {
-  let loadingInstance = Loading.service({ fullscreen: true })
   if (!Object.is(payload, {})) {
     let arr = []
     Object.keys(payload).forEach(item => {
@@ -91,14 +104,12 @@ export function query(url, payload = {}) {
   console.log('post request:', url)
   return new Promise((resolve, reject) => {
     axios.get(url).then(res => {
-      loadingInstance.close();
       if (res.data.code === 200) return resolve(res.data.data)
       reject({
         code: 402,
         msg: res.data.msg
       })
     }).catch(e => {
-      loadingInstance.close();
       reject({
         code: 403
       })

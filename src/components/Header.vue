@@ -44,13 +44,15 @@
               >{{$t("header.signin")}}</el-button>
               <el-button
                 type="text"
-                @click="signout"
                 v-else
-              >{{$t("header.signout")}}</el-button>
+              ><span
+                  style="color:#606266;margin-right:10px;font-weight:normal"
+                  @click="routerTo('myAccount')"
+                >个人中心</span> <span @click="signout">{{$t("header.signout")}}</span></el-button>
               <el-button
                 type="primary"
                 @click="routerTo('cart')"
-              >{{$t("header.cart")}}</el-button>
+              >{{$t("header.cart")}}({{cartNumber}})</el-button>
 
             </div>
           </div>
@@ -199,7 +201,9 @@ export default {
   data() {
     return {
       searchWord: "",
-      categoryList: []
+      categoryList: [],
+      login: false,
+      cartNumber:0
     };
   },
   computed: {
@@ -210,23 +214,40 @@ export default {
         hk: "中文繁体"
       };
       return obj[this.$i18n.locale];
-    },
-    login() {
-      let token = Cookies.get("is_login");
-      console.log("token", token, token == 1);
-      return token == 1;
     }
+    // login() {
+    //   let user_id = Cookies.get("user_id");
+    //   return user_id && user_id > 0;
+    // }
   },
-  async mounted() {
+  async created() {
+    this.$bus.on("cart_change", () => {
+      this.getCartNumber()
+    });
+    this.$bus.on("login_change", () => {
+      this.checkLogin();
+      this.getCat();
+    });
+    this.getCartNumber()
+    this.checkLogin();
     this.getCat();
   },
   methods: {
+    checkLogin() {
+      let user_id = Cookies.get("user_id");
+      this.login = Boolean(user_id && user_id > 0);
+    },
     async getCat() {
       let categoryList = await Common.getCat();
       for (let i = 0; i < categoryList.length; i++) {
         categoryList[i].children = await Common.getCatId(categoryList[i].id);
       }
       this.categoryList = categoryList;
+    },
+    async getCartNumber(){
+      console.log('getCartNumber')
+      let cartNumber = await Common.getCartNumber()
+      this.cartNumber = cartNumber
     },
     inputSearchWord(e) {
       this.searchWord = e;
@@ -235,7 +256,8 @@ export default {
       this.$i18n.locale = e;
     },
     signout() {
-      Cookies.remove("is_login");
+      Cookies.remove("user_id");
+      this.$bus.emit("login_change", {});
     }
   }
 };

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+
     <div id="content-wrapper">
       <section id="main">
         <div class="cart-grid row">
@@ -15,7 +16,14 @@
                 <hr class="separator">
 
                 <div class="cart-overview js-cart">
-                  <ul class="cart-items">
+                  <span
+                    class="no-items"
+                    v-if="cartList.length===0"
+                  >您的购物车中没有更多商品</span>
+                  <ul
+                    class="cart-items"
+                    v-else
+                  >
                     <li
                       class="cart-item"
                       v-for="(item,index) in cartList"
@@ -33,7 +41,7 @@
                         <!--  product left body: description -->
                         <div
                           class="product-line-grid-body col-md-4 col-xs-8"
-                          @click="routerTo('detail')"
+                          @click="routerTo(`detail?id=${item.product_id}`)"
                         >
                           <div class="product-line-info">
                             {{item.productInfo.store_name}}
@@ -70,7 +78,10 @@
                             </div>
                             <div class="col-md-2 col-xs-2 text-xs-right">
                               <div class="cart-line-product-actions">
-                                <i class="el-icon-delete"></i>
+                                <i
+                                  class="el-icon-delete"
+                                  @click="removeCart(item.id)"
+                                ></i>
                               </div>
                             </div>
                           </div>
@@ -88,6 +99,7 @@
               <a
                 class="label"
                 href="javascript:;"
+                @click="routerTo('back')"
               >
                 <i class="el-icon-caret-left"></i>{{$t('cart.backItem')}}
               </a>
@@ -334,19 +346,18 @@
 
               <div class="checkout cart-detailed-actions card-block">
                 <div class="text-sm-center">
-                  <a
-                    href="javascript:;"
+                  <button
                     class="btn btn-primary"
                     @click="confirmOrder"
                     v-if="step=='shop_cart'"
-                  >{{$t('cart.continueCount')}}</a>
+                    :disabled="cartList.length===0"
+                  >{{$t('cart.continueCount')}}</button>
 
-                  <a
-                    href="javascript:;"
+                  <button
                     class="btn btn-primary"
                     @click="createOrder"
                     v-if="step=='order_confirm'"
-                  >{{$t('cart.continueCount')}}</a>
+                  >{{$t('cart.continueCount')}}</button>
 
                 </div>
               </div>
@@ -442,21 +453,32 @@ export default {
       }
     },
     async handleChange({ cartNum, cartId }) {
-      await Cart.changeCartNumber({
-        cartNum,
-        cartId
-      });
+      try {
+        await Cart.changeCartNumber({
+          cartNum,
+          cartId
+        });
+      } catch (e) {
+        this.$message(e.msg);
+      }
+    },
+    async removeCart(id) {
+      try {
+        await Cart.remove_cart(id);
+        this.initCart();
+      } catch (e) {
+        this.$message(e.msg);
+      }
     },
     async createOrder() {
       try {
         let result = await Cart.createOrder({
           addressId: this.addressId,
-          orderKey:this.orderKey,
-          payType:this.payType
+          orderKey: this.orderKey,
+          payType: this.payType
         });
-        console.log(result)
       } catch (e) {
-        this.$message(e.msg)
+        this.$message(e.msg);
       }
     },
     async confirmOrder() {
@@ -467,7 +489,7 @@ export default {
         this.orderKey = result.orderKey;
         this.step = "order_confirm";
       } catch (e) {
-        console.log(e);
+        this.$message(e.msg);
       }
     },
     handleChange(value) {

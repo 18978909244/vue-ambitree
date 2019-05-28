@@ -79,7 +79,8 @@
               <a
                 class="col-lg-4 col-md-6 col-sm-6 col-xs-12"
                 id="history-link"
-                href="https://www.ambitree.in/zh/order-history"
+                href="javascript:;"
+                @click="routerTo('orderList')"
               >
                 <span class="link-item">
                   <i class="el-icon-date"></i>
@@ -121,6 +122,7 @@
 
 </template>
 <script>
+import Cookies from "js-cookie";
 import Bread from "../components/Bread";
 export default {
   name: "myAccount",
@@ -129,6 +131,13 @@ export default {
   },
   data() {
     return {};
+  },
+  methods:{
+    loginout(){
+      Cookies.remove("user_id");
+      this.$router.push('/')
+      this.$bus.emit("login_change", {});
+    }
   }
 };
 </script>

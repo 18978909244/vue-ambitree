@@ -12,5 +12,8 @@
 </script>
 
 <style lang="less">
+a:hover{
+  cursor:pointer
+}
   // @import "~less/base.less";
 </style>

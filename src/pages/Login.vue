@@ -141,6 +141,7 @@ export default {
         this.$router.push({
           path: this.$route.query.redirect || "/"
         });
+        this.$bus.emit('login_change',{})
       } catch (e) {
         console.log(e)
       }
