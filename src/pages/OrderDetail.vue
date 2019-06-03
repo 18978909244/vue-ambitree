@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-
+    <Bread name="订单详情" />
     <div id="content-wrapper">
 
       <section>
@@ -14,7 +14,7 @@
                 </h3>
 
                 <p>
-                  {{orderDetail._status._msg}}
+                  {{orderDetail && orderDetail._status && orderDetail._status._msg}}
                   <img
                     v-if="orderDetail.paid===0"
                     src="https://ambitree.in/logo2.png"
@@ -39,10 +39,10 @@
                 </h3>
 
                 <p>
-                  订单编号：{{orderDetail.order_id}}<br>
-                  下单时间：{{orderDetail.add_time}}<br>
-                  支付方式：{{orderDetail._status._payType}}<br>
-                  支付状态：{{orderDetail.paid===0?'未支付':'已支付'}}<br>
+                  订单编号：{{orderDetail && orderDetail.order_id}}<br>
+                  下单时间：{{orderDetail && orderDetail.add_time}}<br>
+                  支付方式：{{orderDetail && orderDetail._status && orderDetail._status._payType}}<br>
+                  支付状态：{{orderDetail && orderDetail.paid===0?'未支付':'已支付'}}<br>
                 </p>
 
               </div>
@@ -101,9 +101,9 @@
                     </div>
                     <div class="col-sm-6 col-xs-12 qty">
                       <div class="row">
-                        <div class="col-xs-5 text-sm-right text-xs-left">US$&nbsp;{{item.productInfo.price}}</div>
+                        <div class="col-xs-5 text-sm-right text-xs-left">{{exchange(item.productInfo.price)}}</div>
                         <div class="col-xs-2">{{item.cart_num}}</div>
-                        <div class="col-xs-5 text-xs-right bold">US$&nbsp;{{item.cart_num*item.truePrice}}</div>
+                        <div class="col-xs-5 text-xs-right bold">{{exchange(item.cart_num*item.truePrice)}}</div>
                       </div>
                     </div>
                   </div>
@@ -114,15 +114,15 @@
                     <tbody>
                       <tr>
                         <td>小计</td>
-                        <td>US$&nbsp;{{orderDetail.total_price}}</td>
+                        <td>{{exchange(orderDetail.total_price)}}</td>
                       </tr>
                       <tr>
                         <td>配送费：</td>
-                        <td>US$&nbsp;{{orderDetail.pay_postage}}</td>
+                        <td>{{exchange(orderDetail.pay_postage)}}</td>
                       </tr>
                       <tr class="font-weight-bold">
                         <td><span class="text-uppercase">总计</span></td>
-                        <td>US$&nbsp;{{orderDetail.pay_price}}</td>
+                        <td>{{exchange(orderDetail.pay_price)}}</td>
                       </tr>
                     </tbody>
                   </table>

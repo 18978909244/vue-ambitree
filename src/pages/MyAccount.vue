@@ -1,17 +1,11 @@
 <template>
   <div class="container">
 
-    <Bread name="个人主页" />
+    <Bread :name="$t('bread.myAccount')" />
 
     <div id="content-wrapper">
 
       <section id="main">
-
-        <header class="page-header">
-          <h1>
-            Your account
-          </h1>
-        </header>
 
         <section
           id="content"
@@ -31,10 +25,11 @@
                 class="col-lg-4 col-md-6 col-sm-6 col-xs-12"
                 id="identity-link"
                 href="javascript:;"
+                @click="routerTo('forgetPass')"
               >
                 <span class="link-item">
                   <i class="el-icon-s-custom"></i>
-                  信息
+                  {{$t('myAccount.message')}}
                 </span>
               </a>
 
@@ -46,7 +41,7 @@
               >
                 <span class="link-item">
                   <i class="el-icon-location"></i>
-                  Add first address
+                  {{$t('myAccount.address')}}
                 </span>
               </a>
 
@@ -58,7 +53,7 @@
               >
                 <span class="link-item">
                   <i class="el-icon-date"></i>
-                  历史订单(查看运单号)
+                  {{$t('myAccount.history')}}
                 </span>
               </a>
 
@@ -86,7 +81,7 @@
               href="javascript:;"
               @click="loginout"
             >
-              登出
+              {{$t('myAccount.loginout')}}
             </a>
           </div>
 

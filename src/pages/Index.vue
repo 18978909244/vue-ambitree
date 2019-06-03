@@ -2,23 +2,6 @@
 
   <div class="container">
 
-    <nav
-      data-depth="1"
-      class="breadcrumb hidden-sm-down"
-    >
-      <ol
-        itemscope=""
-        itemtype="http://schema.org/BreadcrumbList"
-      >
-
-        <li>
-          <a itemprop="item">
-            <span itemprop="name">Home</span>
-          </a>
-        </li>
-
-      </ol>
-    </nav>
 
     <div id="content-wrapper">
 

@@ -22,7 +22,7 @@
                 data-alert="warning"
               >
                 <ul>
-                  <li>没有可使用的地址。</li>
+                  <li>{{$t('address.noAddress')}}</li>
                 </ul>
               </article>
 
@@ -77,13 +77,13 @@
               class="demo-ruleForm"
             >
               <el-form-item
-                label="姓名"
+                :label="$t('address.name')"
                 prop="real_name"
               >
                 <el-input v-model="ruleForm.real_name"></el-input>
               </el-form-item>
               <el-form-item
-                label="省市区"
+                :label="$t('address.region')"
                 prop="region"
               >
                 <el-cascader
@@ -95,13 +95,13 @@
                 </el-cascader>
               </el-form-item>
               <el-form-item
-                label="手机"
+                :label="$t('address.phone')"
                 prop="phone"
               >
                 <el-input v-model="ruleForm.phone"></el-input>
               </el-form-item>
               <el-form-item
-                label="详细地址"
+                :label="$t('address.detail')"
                 prop="detail"
               >
                 <el-input
@@ -109,15 +109,15 @@
                   v-model="ruleForm.detail"
                 ></el-input>
               </el-form-item>
-              <el-form-item label="默认地址">
+              <el-form-item :label="$t('address.default')">
                 <el-switch v-model="ruleForm.is_default"></el-switch>
               </el-form-item>
               <el-form-item>
                 <el-button
                   type="primary"
                   @click="submitForm('ruleForm')"
-                >提交</el-button>
-                <el-button @click="resetForm('ruleForm')">重置</el-button>
+                >{{$t('address.submit')}}</el-button>
+                <el-button @click="resetForm('ruleForm')">{{$t('address.reset')}}</el-button>
               </el-form-item>
             </el-form>
           </div>

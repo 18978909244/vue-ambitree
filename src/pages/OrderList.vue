@@ -1,15 +1,9 @@
 <template>
   <div class="container page-customer-account">
-
+    <Bread name="我的订单" />
     <div id="content-wrapper">
 
       <section id="main">
-
-        <header class="page-header">
-          <h1>
-            订单历史
-          </h1>
-        </header>
 
         <section
           id="content"
@@ -43,7 +37,7 @@
               >
                 <th scope="row">{{item.order_id}}</th>
                 <td>{{item.order_id.slice(2,10) | dateFn}}</td>
-                <td class="text-xs-right">US$&nbsp;{{item.total_price}}</td>
+                <td class="text-xs-right">{{exchange(item.total_price)}}</td>
                 <td>{{item.pay_type | payToText}}</td>
                 <td>
                   <span

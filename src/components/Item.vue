@@ -32,15 +32,11 @@
             <span
               itemprop="price"
               class="price"
-            >US$&nbsp;{{item.price}}</span>
+            >{{exchange(item.price)}}</span>
 
           </div>
 
         </div>
-
-        <ul class="product-flags">
-          <li class="product-flag discount">Reduced price</li>
-        </ul>
 
         <div class="highlighted-informations no-variants hidden-sm-down">
 
@@ -62,17 +58,15 @@
 <script>
 import Cookies from "js-cookie";
 import { Common } from "../api";
+
 export default {
   name: "item",
   components: {},
-  props:{
-    goodsList:{
-      type:Array,
-      default:[]
+  props: {
+    goodsList: {
+      type: Array,
+      default: []
     }
-  },
-  methods: {
-    
   }
 };
 </script>

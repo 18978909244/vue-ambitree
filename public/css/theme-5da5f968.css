@@ -9677,7 +9677,7 @@ textarea:active:-moz-placeholder {
   z-index: 1;
   background: #fff;
   width: 257px;
-  bottom: 0;
+  bottom: 20px;
   height: 70px
 }
 

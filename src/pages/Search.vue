@@ -18,7 +18,7 @@
               <div class="col-md-6 hidden-sm-down total-products">
                 <p>There are {{goodsList.length}} products.</p>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-6" v-if="goodsList.length!=0">
                 <div class="row sort-by-row">
 
                   <span class="col-sm-6 col-xs-6 col-md-6 hidden-sm-down sort-by">{{$t('category.sortBy')}}:</span>

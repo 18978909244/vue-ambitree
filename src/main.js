@@ -14,8 +14,8 @@ Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(VueI18n);
-Vue.use(MyPlugin);
 Vue.use(VueBus)
+Vue.use(MyPlugin);
 
 const i18n = new VueI18n({
   locale: 'cn',    // 语言标识

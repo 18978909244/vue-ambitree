@@ -5,12 +5,6 @@
 
       <section id="main">
 
-        <header class="page-header">
-          <h1>
-            常见问题
-          </h1>
-        </header>
-
         <section
           id="content"
           class="page-content page-cms page-cms-8"

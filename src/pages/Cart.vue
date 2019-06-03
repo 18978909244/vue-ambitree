@@ -70,7 +70,7 @@
                                 <div class="col-md-6 col-xs-2 price">
                                   <span class="product-price">
                                     <strong>
-                                      US$&nbsp;{{item.productInfo.price*item.cart_num}}
+                                      {{exchange(item.productInfo.price*item.cart_num)}}
                                     </strong>
                                   </span>
                                 </div>
@@ -254,7 +254,7 @@
                     <span class="label js-subtotal">
                       {{cartList.length}} {{$t('cart.countItem')}}
                     </span>
-                    <span class="value">US$&nbsp;{{totalPrice}}</span>
+                    <span class="value">{{exchange(totalPrice)}}</span>
                   </div>
                   <div
                     class="cart-summary-line"
@@ -332,7 +332,7 @@
                 <div class="card-block">
                   <div class="cart-summary-line cart-total">
                     <span class="label">{{$t('cart.total')}}</span>
-                    <span class="value">US$&nbsp;{{totalPrice}}</span>
+                    <span class="value">{{exchange(totalPrice)}}</span>
                   </div>
 
                   <!-- <div class="cart-summary-line">
@@ -477,14 +477,9 @@ export default {
           orderKey: this.orderKey,
           payType: this.payType
         });
-        // if(result.status==='PAY_ERROR'){
-        //   this.$message()
-        // }
         if(result.result){
-          this.$router.push('orderDetail?id='+result.orderId)
-          // console.log('orderId',result.result.orderId)
+          this.$router.push('orderDetail?id='+result.result.orderId)
         }
-        // console.log(result)
       } catch (e) {
         this.$message(e.msg);
       }
@@ -554,7 +549,7 @@ export default {
 
 <style scoped lang="less">
 .el-input-number {
-  width: 100px;
+  width: 80px;
 }
 .address_item {
   display: flex;

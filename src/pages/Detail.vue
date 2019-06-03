@@ -63,7 +63,7 @@
                   <span
                     itemprop="price"
                     content="69"
-                  >US$&nbsp;{{storeInfo.price}}</span>
+                  >{{exchange(storeInfo.price)}}</span>
 
                 </div>
 

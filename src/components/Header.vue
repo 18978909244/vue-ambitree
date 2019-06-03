@@ -12,13 +12,13 @@
         <div class="row">
           <div class="hidden-sm-down">
             <div class="col-md-5 col-xs-12">
-              <el-button
+              <!-- <el-button
                 type="text"
                 @click="routerTo('contact')"
-              >{{$t("header.contact")}}</el-button>
+              >{{$t("header.contact")}}</el-button> -->
             </div>
             <div class="col-md-7 right-nav">
-              <el-dropdown @command="handleCommand">
+              <el-dropdown @command="handleCommandLanguage">
                 <span class="el-dropdown-link">
                   {{language}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
@@ -28,13 +28,13 @@
                   <el-dropdown-item command="cn">中文</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-dropdown>
+              <el-dropdown @command="handleCommandDollar">
                 <span class="el-dropdown-link">
-                  人民币<i class="el-icon-arrow-down el-icon--right"></i>
+                  {{dollar}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>US</el-dropdown-item>
-                  <el-dropdown-item>人民币</el-dropdown-item>
+                  <el-dropdown-item command="USD">US</el-dropdown-item>
+                  <el-dropdown-item command="CNY">人民币</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
               <el-button
@@ -208,6 +208,15 @@ export default {
     };
   },
   computed: {
+    // dollar(){
+    //   let moneyEx = Cookies.get('moneyEx')
+    //   console.log('moneyEx',moneyEx)
+    //   let obj = {
+    //     CNY: "人民币",
+    //     USD: "美元"
+    //   };
+    //   return obj[moneyEx];
+    // },
     language() {
       let obj = {
         cn: "中文",
@@ -253,8 +262,11 @@ export default {
     inputSearchWord(e) {
       this.searchWord = e;
     },
-    handleCommand(e) {
+    handleCommandLanguage(e) {
       this.$i18n.locale = e;
+    },
+    handleCommandDollar(e) {
+      this.$bus.emit('exchange',e)
     },
     signout() {
       Cookies.remove("user_id");

@@ -1,8 +1,21 @@
 module.exports = {
+  bread:{
+    myAccount:'个人中心'
+  },
   common: {
     zhengpin: '授权正品保证',
     shipFree: '满额免除运费',
-    tax: '海关清关服务'
+    tax: '海关清关服务',
+  },
+  address:{
+    noAddress:'没有可使用的地址。',
+    name:'名字',
+    region:'省市区',
+    phone:'手机',
+    detail:'详细地址',
+    default:'默认地址',
+    submit:'提交',
+    reset:'重置'
   },
   index: {
     allproducts: '全部产品',
@@ -29,6 +42,12 @@ module.exports = {
     password: '密码',
     phone: '手机号',
     loginAccount: '登录账号'
+  },
+  myAccount:{
+    loginout:'登出',
+    history:'历史订单(查看运单号)',
+    address:'地址管理',
+    message:'重置密码'
   },
   forgetPass:{
     edit:'修改密码'
