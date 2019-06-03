@@ -57,12 +57,8 @@
 
 </template>
 <script>
-import Bread from "../components/Bread";
 export default {
   name: "checkShip",
-  components: {
-    Bread
-  },
   data() {
     return {};
   }

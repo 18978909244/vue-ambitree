@@ -176,76 +176,7 @@
           <div id="">
 
             <div id="js-product-list">
-              <div
-                class="products row"
-                style="justify-content: space-around;"
-              >
-
-                <article
-                  v-for="(item,index) in goodsList"
-                  :key="index"
-                  class="product-miniature js-product-miniature"
-                  @click="routerTo(`detail?id=${item.id}`)"
-                >
-                  <div class="thumbnail-container">
-
-                    <a
-                      href="javascript:;"
-                      class="thumbnail product-thumbnail"
-                    >
-                      <img
-                        src="https://www.ambitree.in/436-home_default/pomalid-pomalidomide4mg.jpg"
-                        alt="Pomalid 泊马度胺 | Pomalidomide..."
-                        data-full-size-image-url="https://www.ambitree.in/436-large_default/pomalid-pomalidomide4mg.jpg"
-                      >
-                    </a>
-
-                    <div class="product-description">
-
-                      <h2
-                        class="h3 product-title"
-                        itemprop="name"
-                      ><a href="https://www.ambitree.in/zh/multiple-myeloma/154-pomalid-pomalidomide4mg.html">Pomalid 泊马度胺 | Pomalidomide...</a></h2>
-
-                      <div class="product-price-and-shipping">
-
-                        <span class="sr-only">Regular price</span>
-                        <span class="regular-price">US$&nbsp;670.00</span>
-                        <span
-                          class="discount-amount discount-product"
-                          style="top: -238px;"
-                        >-US$&nbsp;71.00</span>
-
-                        <span class="sr-only">价格</span>
-                        <span
-                          itemprop="price"
-                          class="price"
-                        >US$&nbsp;599.00</span>
-
-                      </div>
-
-                    </div>
-
-                    <ul class="product-flags">
-                      <li class="product-flag discount">Reduced price</li>
-                    </ul>
-
-                    <div class="highlighted-informations no-variants hidden-sm-down">
-
-                      <a
-                        class="quick-view"
-                        href="#"
-                        data-link-action="quickview"
-                      >
-                        <i class="material-icons search"></i> 快速查看
-                      </a>
-
-                    </div>
-
-                  </div>
-                </article>
-
-              </div>
+              <Item :goodsList="goodsList" />
 
               <nav
                 class="pagination"
@@ -275,12 +206,12 @@
 
 </template>
 <script>
-import Bread from "../components/Bread";
+import Item from 'src/components/Item'
 import { Common, Category } from "../api";
 export default {
   name: "cart",
-  components: {
-    Bread
+  components:{
+    Item
   },
   data() {
     return {

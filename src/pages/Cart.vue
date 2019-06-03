@@ -204,7 +204,7 @@
                       <el-button
                         type="primary"
                         @click="submitForm('ruleForm')"
-                      >立即创建</el-button>
+                      >提交</el-button>
                       <el-button @click="resetForm('ruleForm')">重置</el-button>
                     </el-form-item>
                   </el-form>
@@ -477,6 +477,14 @@ export default {
           orderKey: this.orderKey,
           payType: this.payType
         });
+        // if(result.status==='PAY_ERROR'){
+        //   this.$message()
+        // }
+        if(result.result){
+          this.$router.push('orderDetail?id='+result.orderId)
+          // console.log('orderId',result.result.orderId)
+        }
+        // console.log(result)
       } catch (e) {
         this.$message(e.msg);
       }
@@ -537,6 +545,7 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.ruleForm.is_default = false;
+      this.ruleForm.id=0
     }
   }
 };
@@ -545,12 +554,16 @@ export default {
 
 <style scoped lang="less">
 .el-input-number {
-  width: 80px;
+  width: 100px;
 }
 .address_item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
+}
+.product-line-grid{
+  display: flex;
+  align-items:center;
 }
 </style>

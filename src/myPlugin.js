@@ -1,6 +1,7 @@
 let MyPlugin = {}
-
+import Bread from "src/components/Bread";
 MyPlugin.install = function (Vue, options) {
+  
   // 3. 注入组件选项
   Vue.mixin({
     data(){
@@ -9,6 +10,9 @@ MyPlugin.install = function (Vue, options) {
       }
     },
     created(){
+    },
+    components: {
+      Bread
     },
     methods: {
       routerTo(route) {

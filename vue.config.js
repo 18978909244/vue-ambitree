@@ -9,7 +9,6 @@ module.exports = {
   chainWebpack: config => {
     config.resolve.alias
       .set('src', resolve('src'))
-      .set('less', resolve('src/assets/less'))
   },
   css: {
     loaderOptions: {

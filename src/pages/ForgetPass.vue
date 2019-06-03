@@ -1,27 +1,17 @@
 <template>
+
   <div class="container">
-    <Bread name="注册"/>
+    <Bread name="找回密码" />
     <div id="content-wrapper">
 
       <section id="main">
-
-        <!-- <header class="page-header">
-          <h1>
-            {{$t('register.createOne')}}
-          </h1>
-        </header> -->
 
         <section
           id="content"
           class="page-content card card-block"
         >
 
-          <section class="register-form">
-            <!-- <p>{{$t('register.alreadyHave')}} <a
-                href="javascript:;"
-                @click="routerTo('login')"
-              >{{$t('register.loginRightNow')}}</a></p> -->
-
+          <section class="login-form">
             <el-form
               :model="ruleForm"
               :rules="rules"
@@ -73,16 +63,11 @@
                 <el-button
                   type="primary"
                   @click="submitForm('ruleForm')"
-                >{{$t('register.createOne')}}</el-button>
-                <a
-                  @click="routerTo('login')"
-                  style="margin-left:20px"
-                >{{$t('register.alreadyHave')}}</a>
+                >{{$t('forgetPass.edit')}}</el-button>
               </el-form-item>
             </el-form>
 
           </section>
-
         </section>
 
       </section>
@@ -92,8 +77,9 @@
   </div>
 </template>
 <script>
+import { User } from "../api";
 export default {
-  name: "register",
+  name: "login",
   data() {
     var validatePass = (rule, value, callback) => {
       if (value === "") {
@@ -145,6 +131,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
+          
+          
         } else {
           console.log("error submit!!");
           return false;

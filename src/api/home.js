@@ -1,5 +1,4 @@
-import {param, post} from './request'
-
+import { get,post } from 'src/utils/request'
 
 export default {
   init:()=>{

@@ -1,64 +1,67 @@
 <template>
   <div class="container">
 
-    <nav
-      data-depth="1"
-      class="breadcrumb hidden-sm-down"
-    >
-      <ol
-        itemscope=""
-        itemtype="http://schema.org/BreadcrumbList"
-      >
-
-        <li
-          itemprop="itemListElement"
-          itemscope=""
-          itemtype="http://schema.org/ListItem"
-        >
-          <a
-            itemprop="item"
-            href="https://www.ambitree.in/zh/"
-          >
-            <span itemprop="name">主页</span>
-          </a>
-          <meta
-            itemprop="position"
-            content="1"
-          >
-        </li>
-
-      </ol>
-    </nav>
-
     <div id="content-wrapper">
 
-      <section id="main">
-
-        <section
-          id="content-hook_order_confirmation"
-          class="card"
-        >
+      <section>
+        <section class="card">
           <div class="card-block">
             <div class="row">
               <div class="col-md-12">
 
                 <h3 class="h1 card-title">
-                  <i class="material-icons rtl-no-flip done"></i>您的订单需要点击以下按钮付款
-
-                  <p><a
-                      href="http://pay.ambitree.in"
-                      target="_blank"
-                    ><img
-                        src="https://ambitree.in/logo2.png"
-                        width="141"
-                        height="70"
-                        border="0"
-                      ></a><br>Please wait for an email with a payment link(或等待付款链接发送到您的注册邮箱)</p>
-
+                  订单状态
                 </h3>
 
                 <p>
-                  An email has been sent to your mail address 40854@qq.com.
+                  {{orderDetail._status._msg}}
+                  <img
+                    v-if="orderDetail.paid===0"
+                    src="https://ambitree.in/logo2.png"
+                    width="141"
+                    height="70"
+                    border="0"
+                  >
+                </p>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-block">
+            <div class="row">
+              <div class="col-md-12">
+
+                <h3 class="h1 card-title">
+                  订单信息
+                </h3>
+
+                <p>
+                  订单编号：{{orderDetail.order_id}}<br>
+                  下单时间：{{orderDetail.add_time}}<br>
+                  支付方式：{{orderDetail._status._payType}}<br>
+                  支付状态：{{orderDetail.paid===0?'未支付':'已支付'}}<br>
+                </p>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-block">
+            <div class="row">
+              <div class="col-md-12">
+
+                <h3 class="h1 card-title">
+                  发货地址
+                </h3>
+
+                <p>
+                  {{orderDetail.user_address}}<br>
+                  {{orderDetail.real_name}} {{orderDetail.user_phone}}
                 </p>
 
               </div>
@@ -82,21 +85,25 @@
 
                 <div class="order-confirmation-table">
 
-                  <div class="order-line row">
+                  <div
+                    class="order-line row"
+                    v-for="(item,index) in cartList"
+                    :key="index"
+                  >
                     <div class="col-sm-2 col-xs-3">
                       <span class="image">
-                        <img src="https://www.ambitree.in/453-home_default/rolimus-everolimus-10mg.jpg">
+                        <img :src="item.productInfo.image">
                       </span>
                     </div>
                     <div class="col-sm-4 col-xs-9 details">
-                      <span>Rolimus 依维莫司 | 飞尼妥 | Everolimus 10mg</span>
+                      <span>{{item.productInfo.store_name}}</span>
 
                     </div>
                     <div class="col-sm-6 col-xs-12 qty">
                       <div class="row">
-                        <div class="col-xs-5 text-sm-right text-xs-left">US$&nbsp;199.00</div>
-                        <div class="col-xs-2">1</div>
-                        <div class="col-xs-5 text-xs-right bold">US$&nbsp;199.00</div>
+                        <div class="col-xs-5 text-sm-right text-xs-left">US$&nbsp;{{item.productInfo.price}}</div>
+                        <div class="col-xs-2">{{item.cart_num}}</div>
+                        <div class="col-xs-5 text-xs-right bold">US$&nbsp;{{item.cart_num*item.truePrice}}</div>
                       </div>
                     </div>
                   </div>
@@ -107,35 +114,20 @@
                     <tbody>
                       <tr>
                         <td>小计</td>
-                        <td>US$&nbsp;199.00</td>
+                        <td>US$&nbsp;{{orderDetail.total_price}}</td>
                       </tr>
                       <tr>
-                        <td>运送及处理：</td>
-                        <td>US$&nbsp;30.00</td>
+                        <td>配送费：</td>
+                        <td>US$&nbsp;{{orderDetail.pay_postage}}</td>
                       </tr>
                       <tr class="font-weight-bold">
-                        <td><span class="text-uppercase">总计</span> （无其他费用）免费包含清关服务</td>
-                        <td>US$&nbsp;229.00</td>
+                        <td><span class="text-uppercase">总计</span></td>
+                        <td>US$&nbsp;{{orderDetail.pay_price}}</td>
                       </tr>
                     </tbody>
                   </table>
 
                 </div>
-              </div>
-
-              <div
-                id="order-details"
-                class="col-md-4"
-              >
-                <h3 class="h3 card-title">订单详细:</h3>
-                <ul>
-                  <li>Order reference: LCKNLBYWW</li>
-                  <li>Payment method: 中国支付宝</li>
-                  <li>
-                    送货方式： EMS<br>
-                    <em>7-14天</em>
-                  </li>
-                </ul>
               </div>
 
             </div>
@@ -151,7 +143,7 @@
 </template>
 <script>
 import Message from "../components/Message";
-import { Cart } from "../api";
+import { Order } from "../api";
 import { regionData, CodeToText, TextToCode } from "element-china-area-data";
 export default {
   name: "cart",
@@ -162,6 +154,7 @@ export default {
     return {
       orderKey: "",
       options: regionData,
+      orderDetail: {},
       cartList: [],
       num: 1,
       step: "shop_cart",
@@ -202,105 +195,115 @@ export default {
     }
   },
   created() {
-    this.initCart();
-    this.initAddress();
+    this.init(this.$route.query.id || "wx2019060209582710005");
+    // this.initCart();
+    // this.initAddress();
   },
   methods: {
-    async initAddress() {
+    async init(uni) {
       try {
-        this.addressList = await Cart.getAddress();
-        for (let i = 0; i < this.addressList.length; i++) {
-          if (this.addressList[i].is_default) {
-            this.addressId = this.addressList[i].id;
-          }
-        }
+        let result = await Order.getOrder(uni);
+        this.cartList = result.cartInfo;
+        this.orderDetail = result;
       } catch (e) {
         console.log(e);
       }
-    },
-    async initCart() {
-      try {
-        let result = await Cart.getCart();
-        this.cartList = result.valid;
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    async handleChange({ cartNum, cartId }) {
-      await Cart.changeCartNumber({
-        cartNum,
-        cartId
-      });
-    },
-    async createOrder() {
-      try {
-        let result = await Cart.createOrder({
-          addressId: this.addressId,
-          orderKey: this.orderKey,
-          payType: this.payType
-        });
-        console.log(result);
-      } catch (e) {
-        this.$message(e.msg);
-      }
-    },
-    async confirmOrder() {
-      try {
-        let result = await Cart.confirmOrder({
-          cartId: this.cartList.map(item => item.id).join(",")
-        });
-        this.orderKey = result.orderKey;
-        this.step = "order_confirm";
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    handleChange(value) {
-      console.log(value);
-    },
-    editAddress(item) {
-      this.ruleForm = {
-        ...item,
-        is_default: item.is_default === 1,
-        region: [
-          TextToCode[item.province].code,
-          TextToCode[item.province][item.city].code,
-          TextToCode[item.province][item.city][item.district].code
-        ]
-      };
-    },
-    submitForm(formName) {
-      this.$refs[formName].validate(async valid => {
-        if (valid) {
-          let address = {
-            province: CodeToText[this.ruleForm.region[0]],
-            city: CodeToText[this.ruleForm.region[1]],
-            district: CodeToText[this.ruleForm.region[2]]
-          };
-          try {
-            await Cart.editUserAddress({
-              address,
-              detail: this.ruleForm.detail,
-              id: this.ruleForm.id,
-              is_default: this.ruleForm.is_default,
-              phone: this.ruleForm.phone,
-              real_name: this.ruleForm.real_name
-            });
-            this.initAddress();
-            this.resetForm("ruleForm");
-          } catch (e) {
-            this.$message(e.msg);
-          }
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-      this.ruleForm.is_default = false;
     }
+    // async initAddress() {
+    //   try {
+    //     this.addressList = await Cart.getAddress();
+    //     for (let i = 0; i < this.addressList.length; i++) {
+    //       if (this.addressList[i].is_default) {
+    //         this.addressId = this.addressList[i].id;
+    //       }
+    //     }
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // },
+    // async initCart() {
+    //   try {
+    //     let result = await Cart.getCart();
+    //     this.cartList = result.valid;
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // },
+    // async handleChange({ cartNum, cartId }) {
+    //   await Cart.changeCartNumber({
+    //     cartNum,
+    //     cartId
+    //   });
+    // },
+    // async createOrder() {
+    //   try {
+    //     let result = await Cart.createOrder({
+    //       addressId: this.addressId,
+    //       orderKey: this.orderKey,
+    //       payType: this.payType
+    //     });
+    //     console.log(result);
+    //   } catch (e) {
+    //     this.$message(e.msg);
+    //   }
+    // },
+    // async confirmOrder() {
+    //   try {
+    //     let result = await Cart.confirmOrder({
+    //       cartId: this.cartList.map(item => item.id).join(",")
+    //     });
+    //     this.orderKey = result.orderKey;
+    //     this.step = "order_confirm";
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // },
+    // handleChange(value) {
+    //   console.log(value);
+    // },
+    // editAddress(item) {
+    //   this.ruleForm = {
+    //     ...item,
+    //     is_default: item.is_default === 1,
+    //     region: [
+    //       TextToCode[item.province].code,
+    //       TextToCode[item.province][item.city].code,
+    //       TextToCode[item.province][item.city][item.district].code
+    //     ]
+    //   };
+    // },
+    // submitForm(formName) {
+    //   this.$refs[formName].validate(async valid => {
+    //     if (valid) {
+    //       let address = {
+    //         province: CodeToText[this.ruleForm.region[0]],
+    //         city: CodeToText[this.ruleForm.region[1]],
+    //         district: CodeToText[this.ruleForm.region[2]]
+    //       };
+    //       try {
+    //         await Cart.editUserAddress({
+    //           address,
+    //           detail: this.ruleForm.detail,
+    //           id: this.ruleForm.id,
+    //           is_default: this.ruleForm.is_default,
+    //           phone: this.ruleForm.phone,
+    //           real_name: this.ruleForm.real_name
+    //         });
+    //         this.initAddress();
+    //         this.resetForm("ruleForm");
+    //       } catch (e) {
+    //         this.$message(e.msg);
+    //       }
+    //     } else {
+    //       console.log("error submit!!");
+    //       return false;
+    //     }
+    //   });
+    // },
+    // resetForm(formName) {
+    //   this.$refs[formName].resetFields();
+    //   this.ruleForm.is_default = false;
+    // }
   }
 };
 </script>

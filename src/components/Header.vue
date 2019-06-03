@@ -144,7 +144,7 @@
                 >常见问题</li>
                 <li
                   class="top-nav"
-                  @click="routerTo('checkShip')"
+                  @click="routerTo('orderList')"
                 >发货运单号</li>
               </ul>
               <div class="clearfix"></div>
@@ -159,11 +159,12 @@
                 v-model="searchWord"
                 class="input-with-select"
                 @change="inputSearchWord"
+                @keyup.enter.native="routerTo(`search?word=${searchWord}`)"
               >
                 <el-button
                   slot="append"
                   icon="el-icon-search"
-                  @click="routerTo('search')"
+                  @click="routerTo(`search?word=${searchWord}`)"
                 ></el-button>
               </el-input>
             </div>

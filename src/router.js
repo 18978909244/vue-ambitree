@@ -27,6 +27,13 @@ const routes = [
       meta: {
         requireAuth: false
       }
+    },{
+      path: 'forgetPass',
+      name: 'forgetPass',
+      component: () => import('./pages/ForgetPass'),
+      meta: {
+        requireAuth: false
+      }
     }, {
       path: 'cart',
       name: 'cart',

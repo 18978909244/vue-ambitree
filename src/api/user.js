@@ -1,5 +1,4 @@
-import { query,post } from './request'
-
+import { get, post, query } from 'src/utils/request'
 
 export default {
   Login: ({

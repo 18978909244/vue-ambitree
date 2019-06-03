@@ -57,12 +57,9 @@
 
 </template>
 <script>
-import Bread from "../components/Bread";
+
 export default {
   name: "question",
-  components: {
-    Bread
-  },
   data() {
     return {};
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 
-    <Bread />
+    <Bread :name="storeInfo.store_name"/>
     <el-dialog
       title="商品成功加入购物车"
       :visible.sync="centerDialogVisible"
@@ -237,12 +237,10 @@
 <script>
 import { Detail } from "../api";
 import Message from "../components/Message";
-import Bread from "../components/Bread";
 export default {
   name: "detail",
   components: {
-    Message,
-    Bread
+    Message
   },
   data() {
     return {
@@ -255,8 +253,13 @@ export default {
     // console.log(this.$route.query.id)
     this.init(this.$route.query.id);
     this.id = this.$route.query.id;
+    this.quanList()
   },
   methods: {
+    async quanList(){
+      let result = await Detail.getCoupon()
+      console.log(result)
+    },
     async init(id = 1) {
       try {
         let {

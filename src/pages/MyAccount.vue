@@ -1,34 +1,7 @@
 <template>
   <div class="container">
 
-    <nav
-      data-depth="1"
-      class="breadcrumb hidden-sm-down"
-    >
-      <ol
-        itemscope=""
-        itemtype="http://schema.org/BreadcrumbList"
-      >
-
-        <li
-          itemprop="itemListElement"
-          itemscope=""
-          itemtype="http://schema.org/ListItem"
-        >
-          <a
-            itemprop="item"
-            href="https://www.ambitree.in/zh/"
-          >
-            <span itemprop="name">主页</span>
-          </a>
-          <meta
-            itemprop="position"
-            content="1"
-          >
-        </li>
-
-      </ol>
-    </nav>
+    <Bread name="个人主页" />
 
     <div id="content-wrapper">
 
@@ -57,7 +30,7 @@
               <a
                 class="col-lg-4 col-md-6 col-sm-6 col-xs-12"
                 id="identity-link"
-                href="https://www.ambitree.in/zh/identity"
+                href="javascript:;"
               >
                 <span class="link-item">
                   <i class="el-icon-s-custom"></i>
@@ -68,7 +41,8 @@
               <a
                 class="col-lg-4 col-md-6 col-sm-6 col-xs-12"
                 id="address-link"
-                href="https://www.ambitree.in/zh/address"
+                href="javascript:;"
+                @click="routerTo('address')"
               >
                 <span class="link-item">
                   <i class="el-icon-location"></i>
@@ -88,16 +62,17 @@
                 </span>
               </a>
 
-              <a
+              <!-- <a
                 class="col-lg-4 col-md-6 col-sm-6 col-xs-12"
                 id="order-slips-link"
-                href="https://www.ambitree.in/zh/order-slip"
+                href="javascript:;"
+                @click="routerTo('address')"
               >
                 <span class="link-item">
                   <i class="el-icon-s-finance"></i>
                   代金券
                 </span>
-              </a>
+              </a> -->
 
             </div>
           </div>
@@ -107,7 +82,10 @@
         <footer class="page-footer">
 
           <div class="text-sm-center">
-            <a href="javascript:;" @click="loginout">
+            <a
+              href="javascript:;"
+              @click="loginout"
+            >
               登出
             </a>
           </div>
@@ -123,19 +101,15 @@
 </template>
 <script>
 import Cookies from "js-cookie";
-import Bread from "../components/Bread";
 export default {
   name: "myAccount",
-  components: {
-    Bread
-  },
   data() {
     return {};
   },
-  methods:{
-    loginout(){
+  methods: {
+    loginout() {
       Cookies.remove("user_id");
-      this.$router.push('/')
+      this.$router.push("/");
       this.$bus.emit("login_change", {});
     }
   }

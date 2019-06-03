@@ -51,67 +51,7 @@
             <h2 class="h2 products-section-title text-uppercase">
               {{$t('index.popProducts')}}
             </h2>
-            <div
-              class="products"
-              style="justify-content:space-around"
-            >
-              <article
-                v-for="(item,index) in productList"
-                :key="index"
-                class="product-miniature js-product-miniature"
-                @click="routerTo(`detail?id=${item.id}`)"
-              >
-                <div class="thumbnail-container">
-
-                  <a
-                    href="javascript:;"
-                    class="thumbnail product-thumbnail"
-                  >
-                    <img :src="item.image">
-                  </a>
-
-                  <div class="product-description">
-
-                    <h3 class="h3 product-title"><a href="javscript:;">{{item.store_name}}</a></h3>
-
-                    <div class="product-price-and-shipping">
-
-                      <!-- <span class="sr-only">正常价格</span>
-                      <span class="regular-price">{{item.price}}</span> -->
-                      <!-- <span
-                        class="discount-amount discount-product"
-                        style="top: -238px;"
-                      >-$29.00</span> -->
-
-                      <!-- <span class="sr-only">价格:</span> -->
-                      <span
-                        itemprop="price"
-                        class="price"
-                      >{{item.price}}</span>
-
-                    </div>
-
-                  </div>
-
-                  <ul class="product-flags">
-                    <li class="product-flag discount">Reduced price</li>
-                  </ul>
-
-                  <div class="highlighted-informations no-variants hidden-sm-down">
-
-                    <a
-                      class="quick-view"
-                      href="javascript:;"
-                    >
-                      <i class="el-icon-position"></i>{{$t('index.quickView')}}
-                    </a>
-
-                  </div>
-
-                </div>
-              </article>
-
-            </div>
+            <Item :goodsList="productList" />
             <div
               class="all-product-link float-xs-left float-md-right h4"
               style="width:100%;text-align:center"
@@ -139,11 +79,14 @@
 <script>
 import { Home } from "../api";
 import { slider, slideritem } from "vue-concise-slider";
+import Item from 'src/components/Item'
+
 export default { 
   name: "index",
   components: {
     slideritem,
-    slider
+    slider,
+    Item
   },
   data() {
     return {

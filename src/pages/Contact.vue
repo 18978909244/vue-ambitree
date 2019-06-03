@@ -162,12 +162,9 @@
 
 </template>
 <script>
-import Bread from "../components/Bread";
+
 export default {
   name: "contact",
-  components: {
-    Bread
-  },
   data() {
     return {};
   }

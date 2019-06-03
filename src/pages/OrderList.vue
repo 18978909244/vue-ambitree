@@ -1,52 +1,6 @@
 <template>
   <div class="container page-customer-account">
 
-    <nav
-      data-depth="2"
-      class="breadcrumb hidden-sm-down"
-    >
-      <ol
-        itemscope=""
-        itemtype="http://schema.org/BreadcrumbList"
-      >
-
-        <li
-          itemprop="itemListElement"
-          itemscope=""
-          itemtype="http://schema.org/ListItem"
-        >
-          <a
-            itemprop="item"
-            href="https://www.ambitree.in/zh/"
-          >
-            <span itemprop="name">主页</span>
-          </a>
-          <meta
-            itemprop="position"
-            content="1"
-          >
-        </li>
-
-        <li
-          itemprop="itemListElement"
-          itemscope=""
-          itemtype="http://schema.org/ListItem"
-        >
-          <a
-            itemprop="item"
-            href="https://www.ambitree.in/zh/my-account"
-          >
-            <span itemprop="name">Your account</span>
-          </a>
-          <meta
-            itemprop="position"
-            content="2"
-          >
-        </li>
-
-      </ol>
-    </nav>
-
     <div id="content-wrapper">
 
       <section id="main">
@@ -68,7 +22,7 @@
             </div>
           </aside>
 
-          <h6>该处为您的帐户建立时起您放置的订单</h6>
+          <!-- <h6>该处为您的帐户建立时起您放置的订单</h6> -->
 
           <table class="table table-striped table-bordered table-labeled hidden-sm-down">
             <thead class="thead-default">
@@ -76,37 +30,41 @@
                 <th>订单参考</th>
                 <th>日期</th>
                 <th>总价</th>
-                <th class="hidden-md-down">付款</th>
+                <th>付款方式</th>
                 <th class="hidden-md-down">状态</th>
-                <th>备注</th>
+                <!-- <th>备注</th> -->
                 <th>&nbsp;</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <th scope="row">LCKNLBYWW</th>
-                <td>2019-05-26</td>
-                <td class="text-xs-right">US$&nbsp;229.00</td>
-                <td class="hidden-md-down">中国支付宝</td>
+            <tbody v-if="orderList && orderList.length>0">
+              <tr
+                v-for="(item,index) in orderList"
+                :key="index"
+              >
+                <th scope="row">{{item.order_id}}</th>
+                <td>{{item.order_id.slice(2,10) | dateFn}}</td>
+                <td class="text-xs-right">US$&nbsp;{{item.total_price}}</td>
+                <td>{{item.pay_type | payToText}}</td>
                 <td>
                   <span
                     class="label label-pill bright"
                     style="background-color:#4169E1"
+                    @click="routerTo(`orderDetail?id=${item.order_id}`)"
                   >
-                    等待支付
+                    {{item._status._title}}
                   </span>
                 </td>
-                <td class="text-sm-center hidden-md-down">
+                <!-- <td class="text-sm-center hidden-md-down">
                   -
-                </td>
+                </td> -->
                 <td class="text-sm-center order-actions">
                   <a
-                    href="https://www.ambitree.in/zh/index.php?controller=order-detail&amp;id_order=1182"
-                    data-link-action="view-order-details"
+                    href="javascript:;"
+                    @click="routerTo(`orderDetail?id=${item.order_id}`)"
                   >
-                    详细(运单号)
+                    详细
                   </a>
-                  <a href="https://www.ambitree.in/zh/订单?submitReorder=&amp;id_order=1182">重新预订</a>
+                  <!-- <a href="https://www.ambitree.in/zh/订单?submitReorder=&amp;id_order=1182">重新预订</a> -->
                 </td>
               </tr>
             </tbody>
@@ -183,7 +141,7 @@
 </template>
 <script>
 import Message from "../components/Message";
-import { Cart } from "../api";
+import { Order } from "../api";
 import { regionData, CodeToText, TextToCode } from "element-china-area-data";
 export default {
   name: "cart",
@@ -194,7 +152,7 @@ export default {
     return {
       orderKey: "",
       options: regionData,
-      cartList: [],
+      orderList: [],
       num: 1,
       step: "shop_cart",
       payType: "yue",
@@ -222,7 +180,28 @@ export default {
       }
     };
   },
-  computed: {
+  filters: {
+    dateFn(str){
+      let year = str.slice(0,4)
+      let month = str.slice(4,6)
+      let day = str.slice(6,8)
+      return `${year}-${month}-${day}`
+    },
+    payToText(type) {
+      let payText = "";
+      switch (type) {
+        case "yue":
+          payText = "余额";
+          break;
+        case "weixin":
+          payText = "微信";
+          break;
+        default:
+          payText = "";
+          break;
+      }
+      return payText;
+    },
     totalPrice() {
       let total = 0;
       for (let i = 0; i < this.cartList.length; i++) {
@@ -234,10 +213,16 @@ export default {
     }
   },
   created() {
-    this.initCart();
-    this.initAddress();
+    this.init();
+    // this.initCart();
+    // this.initAddress();
   },
   methods: {
+    async init() {
+      let result = await Order.getOrderList();
+      this.orderList = result;
+      console.log(this.orderList);
+    },
     async initAddress() {
       try {
         this.addressList = await Cart.getAddress();
@@ -347,5 +332,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
+}
+.bright:hover{
+  cursor: pointer;
 }
 </style>

@@ -1,16 +1,10 @@
 <template>
 
   <div class="container">
-
+    <Bread name="登录" />
     <div id="content-wrapper">
 
       <section id="main">
-
-        <header class="page-header">
-          <h1>
-            {{$t('login.loginAccount')}}
-          </h1>
-        </header>
 
         <section
           id="content"
@@ -18,92 +12,49 @@
         >
 
           <section class="login-form">
-
-            <section>
-
-              <div class="form-group row ">
-                <label class="col-md-3 form-control-label required">
-                  {{$t('login.email')}}
-                </label>
-                <div class="col-md-6">
-
-                  <input
-                    class="form-control"
-                    name="account"
-                    v-model.trim="account"
-                  />
-
-                </div>
-
-                <div class="col-md-3 form-control-comment">
-
-                </div>
-              </div>
-
-              <div class="form-group row ">
-                <label class="col-md-3 form-control-label required">
-                  {{$t('login.password')}}
-                </label>
-                <div class="col-md-6">
-
-                  <div class="input-group js-parent-focus">
-                    <input
-                      class="form-control js-child-focus js-visible-password"
-                      name="password"
-                      type="password"
-                      v-model.trim="pwd"
-                    >
-                  </div>
-
-                </div>
-
-                <div class="col-md-3 form-control-comment">
-
-                </div>
-              </div>
-
-              <div
-                class="forgot-password"
-                style="text-align:center"
+            <el-form
+              :model="ruleForm"
+              :rules="rules"
+              ref="ruleForm"
+              label-width="100px"
+              class="demo-ruleForm"
+            >
+              <el-form-item
+                label="手机"
+                prop="phone"
               >
+                <el-input
+                  v-model="ruleForm.phone"
+                  type="text"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item
+                label="密码"
+                prop="password"
+              >
+                <el-input
+                  type="password"
+                  v-model="ruleForm.password"
+                ></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button
+                  type="primary"
+                  @click="submitForm('ruleForm')"
+                >{{$t('login.login')}}</el-button>
                 <a
-                  href="javascript:;"
-                  @click="routerTo('forgetPassword')"
-                >
-                  {{$t('login.forgetPassword')}}
-                </a>
-              </div>
-            </section>
-
-            <footer class="form-footer text-sm-center clearfix">
-
-              <button
-                id="submit-login"
-                class="btn btn-primary"
-                data-link-action="sign-in"
-                @click="onClickLogin"
-              >
-                {{$t('login.login')}}
-              </button>
-
-            </footer>
+                  @click="routerTo('register')"
+                  style="margin-left:20px"
+                >{{$t('login.noAccount')}}</a>
+                <a
+                  @click="routerTo('forgetPass')"
+                  style="margin-left:20px"
+                >{{$t('login.forgetPassword')}}</a>
+              </el-form-item>
+            </el-form>
 
           </section>
-          <hr>
-
-          <div
-            class="no-account"
-            style="text-align:center"
-          >
-            <a
-              href="javascript:;"
-              data-link-action="display-register-form"
-              @click="routerTo('register')"
-            >
-              {{$t('login.noAccount')}}
-            </a>
-          </div>
-
         </section>
 
       </section>
@@ -116,14 +67,40 @@
 import { User } from "../api";
 export default {
   name: "login",
-  components: {},
   data() {
     return {
-      account: "crmeb",
-      pwd: "123456"
+      ruleForm: {
+        phone: "crmeb",
+        password: "123456"
+      },
+      rules: {
+        phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
+      }
     };
   },
   methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          try {
+            let result = await User.Login({
+              account: this.ruleForm.phone,
+              pwd: this.ruleForm.password
+            });
+            this.$router.push({
+              path: this.$route.query.redirect || "/"
+            });
+            this.$bus.emit("login_change", {});
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
     async onClickLogin(e) {
       if (!this.account) {
         this.$message("请输入账号");
@@ -141,9 +118,9 @@ export default {
         this.$router.push({
           path: this.$route.query.redirect || "/"
         });
-        this.$bus.emit('login_change',{})
+        this.$bus.emit("login_change", {});
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
     }
   }
@@ -152,4 +129,8 @@ export default {
 
 
 <style scoped lang="less">
+.demo-ruleForm {
+  width: 500px;
+  margin: 0 auto;
+}
 </style>

@@ -27,8 +27,11 @@ module.exports = {
     forgetPassword: '忘记密码？',
     login: '登录',
     password: '密码',
-    email: 'Email(邮箱)',
+    phone: '手机号',
     loginAccount: '登录账号'
+  },
+  forgetPass:{
+    edit:'修改密码'
   },
   header: {
     contact: '联系我们(在线客服在右下角)',

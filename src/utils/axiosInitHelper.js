@@ -9,7 +9,7 @@ function startLoading() {
   loading = Loading.service({
     lock: true,
     text: '加载中……',
-    background: 'rgba(0, 0, 0, 0.7)'
+    // background: 'rgba(0, 0, 0, 0.7)'
   })
 }
 
